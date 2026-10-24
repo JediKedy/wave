@@ -149,6 +149,10 @@ body::before {
   animation: ledPulse 0.6s ease-in-out infinite alternate;
   box-shadow: 0 0 6px var(--amber), 0 0 12px rgba(255,184,51,0.5);
 }
+.power-led.error {
+  background: var(--red-led);
+  box-shadow: 0 0 6px var(--red-led), 0 0 12px rgba(255,34,68,0.5);
+}
 @keyframes ledPulse {
   from { opacity: 0.4; }
   to { opacity: 1; }
@@ -193,7 +197,9 @@ body::before {
   color: rgba(255,184,51,0.45);
   box-shadow: var(--raise-sm), inset 0 1px 0 rgba(255,255,255,0.06);
   touch-action: manipulation;
+  transition: transform 0.1s, box-shadow 0.1s;
 }
+.filter-tab:active { transform: translateY(1px); box-shadow: var(--inset); }
 .filter-tab.selected {
   background: linear-gradient(180deg, #1a1208 0%, #231c11 100%);
   color: var(--amber);
@@ -246,7 +252,9 @@ body::before {
   color: rgba(255,184,51,0.45);
   box-shadow: var(--raise-sm), inset 0 1px 0 rgba(255,255,255,0.06);
   touch-action: manipulation;
+  transition: transform 0.1s, box-shadow 0.1s;
 }
+.filter-btn:active { transform: translateY(1px); box-shadow: var(--inset); }
 .filter-btn.selected {
   background: linear-gradient(180deg, #1a1208 0%, #231c11 100%);
   color: var(--amber);
@@ -314,6 +322,7 @@ body::before {
   overflow-y: hidden;
   scrollbar-width: none;
   -webkit-overflow-scrolling: touch;
+  scroll-behavior: smooth; /* Smooth mechanical scroll effect */
 }
 .wave-scroll::-webkit-scrollbar { display: none; }
 
@@ -348,6 +357,7 @@ body::before {
   background: #5a4a2a;
   border-radius: 1px;
   flex-shrink: 0;
+  transition: all 0.2s;
 }
 .wave-marker.selected .marker-tick {
   background: #b32000;
@@ -362,6 +372,7 @@ body::before {
   background: transparent;
   border: 1.5px solid #5a4a2a;
   flex-shrink: 0;
+  transition: all 0.2s;
 }
 .wave-marker.selected .marker-diamond {
   background: #b32000;
@@ -381,6 +392,7 @@ body::before {
   white-space: nowrap;
   text-transform: uppercase;
   margin-top:  5px;
+  transition: color 0.2s;
 }
 .wave-marker.selected .marker-label {
   color: #8f1600;
@@ -397,7 +409,7 @@ body::before {
   box-shadow: 0 0 6px rgba(204,34,0,0.7);
   z-index: 3;
   pointer-events: none;
-  transition: left 0.25s ease;
+  transition: left 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
 }
 
 .wave-empty {
@@ -413,7 +425,7 @@ body::before {
   z-index: 4;
 }
 
-/* Transport column: buttons row + playing gif below, same height as wave */
+/* Transport column: buttons row + playing eq below */
 .transport-col {
   display: flex;
   flex-direction: column;
@@ -424,7 +436,6 @@ body::before {
   padding: 0 2px;
 }
 
-/* Transport: prev + play + next grouped */
 .transport {
   display: flex;
   align-items: center;
@@ -433,32 +444,51 @@ body::before {
   padding: 0 2px;
 }
 
+/* Pure CSS Equalizer replacement */
 .transport-eq {
   width: 100%;
   height: 84px;
   background: linear-gradient(180deg, #0d0a04 0%, #1a1408 100%);
   border-radius: 6px;
-  padding: 5px;
+  padding: 10px;
   box-shadow: var(--inset), 0 0 0 1px rgba(0,0,0,0.5);
   display: flex;
-  align-items: center;
+  align-items: flex-end;
   justify-content: center;
+  gap: 3px;
   position: relative;
   overflow: hidden;
 }
 
-.transport-eq img {
-  width: 100%;
-  height: 100%;
-  max-width: 130px;
-  object-fit: contain;
-  image-rendering: pixelated;
-  border-radius: 3px;
-  background: transparent;
-  filter: invert(1) sepia(1) saturate(5) hue-rotate(-8deg) brightness(1.05)
-    drop-shadow(0 0 5px rgba(255,184,51,0.9))
-    drop-shadow(0 0 12px rgba(255,150,0,0.45));
-  opacity: 0.95;
+.eq-bar {
+  flex: 1;
+  max-width: 10px;
+  background: linear-gradient(180deg, var(--amber) 0%, var(--amber-dim) 100%);
+  border-radius: 2px 2px 0 0;
+  box-shadow: 0 0 8px rgba(255, 184, 51, 0.4);
+  animation: eq-bounce 0.5s infinite alternate ease-in-out;
+  transform-origin: bottom;
+  height: 5%;
+}
+
+.transport-eq.active .eq-bar:nth-child(1) { animation-duration: 0.4s; animation-delay: 0.0s; }
+.transport-eq.active .eq-bar:nth-child(2) { animation-duration: 0.6s; animation-delay: 0.2s; }
+.transport-eq.active .eq-bar:nth-child(3) { animation-duration: 0.5s; animation-delay: 0.4s; }
+.transport-eq.active .eq-bar:nth-child(4) { animation-duration: 0.7s; animation-delay: 0.1s; }
+.transport-eq.active .eq-bar:nth-child(5) { animation-duration: 0.45s; animation-delay: 0.3s; }
+.transport-eq.active .eq-bar:nth-child(6) { animation-duration: 0.55s; animation-delay: 0.5s; }
+.transport-eq.active .eq-bar:nth-child(7) { animation-duration: 0.65s; animation-delay: 0.2s; }
+
+/* Freeze eq when not active */
+.transport-eq:not(.active) .eq-bar {
+  animation: none !important;
+  height: 5% !important;
+  opacity: 0.3;
+}
+
+@keyframes eq-bounce {
+  0% { height: 10%; }
+  100% { height: 90%; }
 }
 
 .ctrl-btn {
@@ -500,7 +530,6 @@ body::before {
   50% { filter: brightness(1.35); }
 }
 
-/* Transport icons: engraved SVG glyphs, dead-centered via flex */
 .ctrl-btn svg {
   display: block;
   width: 18px;
@@ -530,7 +559,6 @@ body::before {
   height: 158px;
 }
 
-/* Details monitor display: compact, no longer fills the page */
 .details-window {
   margin: 0;
   flex: 1;
@@ -620,6 +648,7 @@ body::before {
 
 .details-meta .meta-row { display: block; }
 .details-meta .meta-key { color: rgba(200,140,0,0.55); }
+.details-meta .meta-error { color: var(--red-led); font-weight: bold; text-shadow: 0 0 8px rgba(255,34,68,0.6); }
 
 .details-desc {
   font-family: var(--dial-font);
@@ -641,18 +670,6 @@ body::before {
   margin-top: 10px;
 }
 
-.eq-monitor {
-  flex-shrink: 0;
-  width: 72px;
-  height: 50px;
-  object-fit: cover;
-  image-rendering: pixelated;
-  border-radius: 2px;
-  background: #0f0c04;
-  filter: sepia(1) saturate(2.6) hue-rotate(-12deg) brightness(0.85) contrast(1.35);
-  opacity: 0.92;
-}
-
 /* Speaker box: vintage grille right of the description */
 .speaker-box {
   width: 118px;
@@ -664,6 +681,7 @@ body::before {
   display: flex;
   flex-direction: column;
   gap: 6px;
+  transition: box-shadow 0.3s;
 }
 
 .speaker-grille-real {
@@ -684,6 +702,7 @@ body::before {
   text-transform: uppercase;
   text-align: center;
   color: rgba(255,184,51,0.35);
+  transition: color 0.3s, text-shadow 0.3s;
 }
 
 .speaker-box.playing {
@@ -718,7 +737,6 @@ body::before {
   .transport-eq { height: 76px; }
   .details-name { font-size: 1.05rem; }
   .marker-label { font-size: 0.52rem; max-height: 88px; }
-  .eq-monitor { width: 60px; height: 42px; }
   .bottom-row { height: 148px; }
   .speaker-box { width: 96px; }
 }
@@ -806,8 +824,15 @@ body::before {
         <button class="ctrl-btn ctrl-btn-play" id="playBtn" type="button" disabled aria-label="Play / Stop"><svg viewBox="0 0 24 24" aria-hidden="true"><path class="btn-icon" d="M7 4l13 8-13 8z"/></svg></button>
         <button class="ctrl-btn ctrl-btn-next" id="nextBtn" type="button" disabled aria-label="Next station"><svg viewBox="0 0 24 24" aria-hidden="true"><path class="btn-icon" d="M13 5v14l7.5-7zM3 5v14l7.5-7z"/></svg></button>
       </div>
-      <div class="transport-eq" id="transportEq">
-        <img id="eqImg" src="equalizer.gif" alt="" aria-hidden="true" style="visibility:hidden"/>
+      <div class="transport-eq" id="transportEq" aria-hidden="true">
+        <!-- Replaced GIF with CSS Eq -->
+        <div class="eq-bar"></div>
+        <div class="eq-bar"></div>
+        <div class="eq-bar"></div>
+        <div class="eq-bar"></div>
+        <div class="eq-bar"></div>
+        <div class="eq-bar"></div>
+        <div class="eq-bar"></div>
       </div>
     </div>
   </div>
@@ -861,6 +886,11 @@ function getLanguage(station) {
   return COUNTRY_LANGUAGE[station.country] || 'English';
 }
 
+// Utility: Haptic Feedback for physical interaction feel
+function triggerHaptic(duration = 15) {
+  try { if (navigator.vibrate) navigator.vibrate(duration); } catch (e) {}
+}
+
 let activeTab = 'All';
 let selectedCountry = 'All';
 let selectedCategory = 'All';
@@ -887,7 +917,6 @@ const detailName = document.getElementById('detailName');
 const detailMeta = document.getElementById('detailMeta');
 const detailDesc = document.getElementById('detailDesc');
 const detailCount = document.getElementById('detailCount');
-const eqImg = document.getElementById('eqImg');
 const transportEq = document.getElementById('transportEq');
 const speakerBox = document.getElementById('speakerBox');
 const groupCountries = document.getElementById('groupCountries');
@@ -916,6 +945,7 @@ function renderFilterRow(rowEl, values, selectedValue, onSelect) {
     btn.setAttribute('role', 'tab');
     btn.setAttribute('aria-selected', value === selectedValue ? 'true' : 'false');
     btn.addEventListener('click', () => {
+      triggerHaptic();
       onSelect(value);
       btn.scrollIntoView({ inline: 'nearest', block: 'nearest' });
     });
@@ -949,6 +979,7 @@ function highlightFilters() {
 }
 
 function setActiveTab(tab) {
+  triggerHaptic();
   activeTab = tab;
   [['All', 'tabAll'], ['Countries', 'tabCountries'], ['Categories', 'tabCategories'], ['Languages', 'tabLanguages']].forEach(([name, id]) => {
     const el = document.getElementById(id);
@@ -970,8 +1001,7 @@ function applyFilters() {
   highlightMarker(currentStationIndex);
   layoutWave();
   if (keepPlayer) return;
-  // Auto-select the list's first station (no autoplay) so Play is
-  // immediately clickable without touching the wave dial.
+  
   if (currentStations.length) {
     selectStation(0, false);
   } else {
@@ -1014,7 +1044,12 @@ function renderWave() {
     btn.appendChild(tick);
     btn.appendChild(diamond);
     btn.appendChild(label);
-    btn.addEventListener('click', () => selectStation(i, true));
+    
+    btn.addEventListener('click', () => {
+      triggerHaptic(20); // Tuning click feel
+      selectStation(i, true);
+    });
+    
     btn.addEventListener('keydown', e => {
       if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); selectStation(i, true); }
     });
@@ -1042,7 +1077,10 @@ function layoutWave() {
 function scrollMarkerIntoView(index) {
   const el = waveTrack.querySelector('.wave-marker[data-index="' + index + '"]');
   if (el && el.scrollIntoView) {
-    try { el.scrollIntoView({ inline: 'nearest', block: 'nearest' }); } catch (error) {}
+    try { 
+      // Changed to 'center' and 'smooth' so the dial physically acts like a radio dial
+      el.scrollIntoView({ inline: 'center', block: 'nearest', behavior: 'smooth' }); 
+    } catch (error) {}
   }
 }
 
@@ -1157,7 +1195,7 @@ function pauseNoise() {
 
 function updateEq() {
   const playing = !!currentUrl && !audio.paused && !isLoading;
-  eqImg.style.visibility = playing ? 'visible' : 'hidden';
+  transportEq.classList.toggle('active', playing);
   speakerBox.classList.toggle('playing', playing);
 }
 
@@ -1178,6 +1216,7 @@ function stopAudio() {
 }
 
 function togglePlay() {
+  triggerHaptic();
   const station = currentStations[currentStationIndex] || currentStation;
   if (!station || isLoading) return;
   if (currentUrl === station.url && !audio.paused) { stopAudio(); return; }
@@ -1214,7 +1253,9 @@ function playStation(station) {
   const onError = () => {
     isLoading = false;
     stopAudio();
-    detailMeta.textContent = 'Signal lost — try again';
+    // Visual error indication
+    powerLed.className = 'power-led error';
+    detailMeta.innerHTML = '<span class="meta-row meta-error">STREAM OFFLINE — TRY AGAIN</span>';
   };
 
   if (station.url.includes('.m3u8') && window.Hls && Hls.isSupported()) {
@@ -1236,6 +1277,7 @@ function playStation(station) {
 }
 
 function moveStation(dir) {
+  triggerHaptic(20);
   if (!currentStations.length) return;
   let next;
   if (currentStationIndex < 0) {
@@ -1295,8 +1337,6 @@ function rememberStation(station) {
 
 function restoreLastStation() {
   try {
-    // Filters always start at All / All / All / All; only the station
-    // selection is restored (the full list always contains it).
     selectedCountry = 'All';
     selectedCategory = 'All';
     selectedLanguage = 'All';
@@ -1336,7 +1376,14 @@ audio.addEventListener('ended', () => {
   highlightMarker(currentStationIndex);
   updateEq();
 });
-audio.addEventListener('error', () => { if (currentUrl) stopAudio(); });
+audio.addEventListener('error', () => { 
+  if (currentUrl) {
+    stopAudio();
+    // Visual error indication
+    powerLed.className = 'power-led error';
+    detailMeta.innerHTML = '<span class="meta-row meta-error">STREAM OFFLINE — TRY AGAIN</span>';
+  }
+});
 window.addEventListener('resize', layoutWave);
 
 renderAllFilters();

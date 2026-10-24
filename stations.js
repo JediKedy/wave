@@ -27,6 +27,15 @@ const stations = [
 		cover: './coverarts/power-turk-fm.jpg'
 	},
 	{
+		name: 'Power FM',
+		description: 'One of Turkey\'s leading hit music stations playing the best international pop, dance, and R&B hits.',
+		country: 'Türkiye',
+		url: 'https://live.powerapp.com.tr/powerfmadver/abr/playlist.m3u8',
+		category: 'International pop',
+		quality: '128kbps',
+		cover: './coverarts/power-fm.jpg'
+	},
+	{
 		name: 'America\'s Country',
 		description: 'An online country station spinning the biggest hits from the 1990s to today—featuring artists like Luke Combs, Jason Aldean, Brad Paisley, and more, delivered with minimal chatter and lots of musical passion.',
 		country: 'United States',
@@ -117,12 +126,93 @@ const stations = [
 		cover: './coverarts/deutschlandfunk.jpg'
 	},
 	{
-		name: 'Xezer 103 FM',
+		name: 'Xəzər FM (103 FM)',
 		description: 'Azerbaijan\'s popular radio station based in Baku, playing a mix of pop, rock, R&B, and Azerbaijani folk music, along with news and entertainment.',
 		country: 'Azerbaijan',
 		url: 'https://s40.myradiostream.com/22546/listen.mp3',
-		category: 'Pop / dance',
+		category: 'Pop / Dance',
 		quality: '128kbps',
-		cover: './coverarts/xezer-103-fm.jpg'
+		cover: './coverarts/xezer-fm.jpg'
+	},
+	{
+		name: 'Baku Retro FM (93.3 FM)',
+		description: 'Your favorite nostalgic hits and golden classics broadcasting from Baku, Azerbaijan.',
+		country: 'Azerbaijan',
+		url: 'https://stream.bakuradioalliance.az/retrofm',
+		category: 'Retro',
+		quality: '128kbps',
+		cover: './coverarts/baku-retro-fm.jpg'
+	},
+	{
+		name: 'Baku Hit FM (97.7 FM)',
+		description: 'The top destination for the latest pop tracks and hottest chart-topping hits in Azerbaijan.',
+		country: 'Azerbaijan',
+		url: 'https://stream.bakuradioalliance.az/hitfm',
+		category: 'Contemporary hits',
+		quality: '128kbps',
+		cover: './coverarts/baku-hit-fm.jpg'
+	},
+	{
+		name: 'Radio Enerji (101.1 FM)',
+		description: 'An upbeat and energetic station delivering high-tempo dance, pop, and electronic music.',
+		country: 'Azerbaijan',
+		url: 'https://icecast.livetv.az/antennfm',
+		category: 'Pop / Dance',
+		quality: '128kbps',
+		cover: './coverarts/radio-enerji.jpg'
+	},
+	{
+		name: 'Avto FM (107.7 FM)',
+		description: 'Azerbaijan\'s premier station for drivers, combining great music with real-time traffic updates and news.',
+		country: 'Azerbaijan',
+		url: 'http://5.191.241.101:8000/avtofm',
+		category: 'Pop / Generalist',
+		quality: '128kbps',
+		cover: './coverarts/avto-fm.jpg'
+	},
+	{
+		name: 'Media FM (105.5 FM)',
+		description: 'A well-known national radio station delivering a blend of local and international hits alongside news updates.',
+		country: 'Azerbaijan',
+		url: 'https://icecast.livetv.az/mediafm',
+		category: 'Generalist',
+		quality: '128kbps',
+		cover: './coverarts/media-fm.jpg'
+	},
+	{
+		name: 'TMB Radio (100.5 FM)',
+		description: 'Türk Milli Mərkəzi (TMB) Radio connects listeners with modern pop and traditional tunes from across the Turkic world.',
+		country: 'Azerbaijan',
+		url: 'https://s39.myradiostream.com/:5458/listen.mp3',
+		category: 'Pop / Folk',
+		quality: '128kbps',
+		cover: './coverarts/tmb-radio.jpg'
+	},
+	{
+		name: 'ASAN Radio (100 FM)',
+		description: 'The first state-funded radio station in Azerbaijan dedicated to public services, informative talk shows, and modern music.',
+		country: 'Azerbaijan',
+		url: 'http://94.20.74.206:4448/stream1',
+		category: 'Public radio',
+		quality: '128kbps',
+		cover: './coverarts/asan-radio.jpg'
+	},
+	{
+		name: 'İctimai Radio (90 FM)',
+		description: 'Azerbaijan\'s public radio broadcasting rich cultural, educational, and entertainment programs.',
+		country: 'Azerbaijan',
+		url: 'https://stream.itv.az/rtmp:/radio/playlist.m3u8',
+		category: 'Public radio',
+		quality: '128kbps',
+		cover: './coverarts/ictimai-radio.jpg'
+	},
+	{
+		name: 'Araz FM (103.3 FM)',
+		description: 'A popular local station featuring national Azerbaijani hits, folk tunes, and engaging daily shows.',
+		country: 'Azerbaijan',
+		url: 'https://s14.myradiostream.com/30454/listen.mp3',
+		category: 'Pop / National',
+		quality: '128kbps',
+		cover: './coverarts/araz-fm.jpg'
 	}
 ];

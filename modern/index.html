@@ -1,842 +1,336 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="az">
 <head>
-<meta charset="UTF-8"/>
-<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <base href="../">
+<title>Modern Radio</title>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" rel="stylesheet">
+<link rel="manifest" href="manifest.json">
 <link rel="icon" href="icon.svg">
-<link rel="apple-touch-icon" href="icon.svg">
-<link rel="manifest" href="manifest-modern.json">
-<meta name="theme-color" content="#ffffff">
-<title>Wave Modern</title>
+<meta name="theme-color" content="#000000">
 <style>
-:root {
-	font-family: sans-serif;
-	font-size: 16px;
-	color: #102033;
-	background: #f5f9ff;
-	--player-height: 160px;
-	--line: #cad8ea;
-	--blue: #1d5f9e;
-	--soft: #eaf3ff;
-}
-
-* {
-	box-sizing: border-box;
-}
-
-html,
-body {
-	width: 100%;
-	height: 100%;
-	margin: 0;
-	background: #f5f9ff;
-	color: #102033;
-}
-
-body {
-	min-height: 100dvh;
-	overflow: hidden;
-}
-
-a {
-	color: #102033;
-	text-decoration: none;
-}
-
-button {
-	font: inherit;
-	background: var(--blue);
-	color: #fff;
-	border: 1px solid var(--blue);
-	border-radius: 8px;
-	padding: 0.7rem 0.85rem;
-	line-height: 1;
-	min-height: 44px;
-}
-
-button:focus-visible,
-a:focus-visible {
-	outline: 2px solid var(--blue);
-	outline-offset: 2px;
-}
-
-button:disabled {
-	opacity: 0.45;
-	cursor: not-allowed;
-}
-
-button.secondary {
-	background: #fff;
-	color: #24415f;
-	border-color: var(--line);
-}
-
-.app {
-	width: 100%;
-	max-width: 900px;
-	height: 100dvh;
-	margin: 0 auto;
-	display: grid;
-	grid-template-rows: auto auto 1fr auto;
-	background: #fff;
-}
-
-header {
-	padding: 0.8rem 0.85rem 0.55rem;
-	border-bottom: 1px solid var(--line);
-}
-
-h1,
-p {
-	margin: 0;
-}
-
-h1 {
-	font-size: 1.2rem;
-	line-height: 1.2;
-}
-
-	header p {
-		margin-top: 0.25rem;
-		font-size: 0.9rem;
-		line-height: 1.35;
-		color: #5e7187;
-	}
-
-	.versions {
-		margin-top: 0.35rem;
-		font-size: 0.85rem;
-		line-height: 1.35;
-		color: #5e7187;
-	}
-
-	.versions a {
-		color: var(--blue);
-	}
-
-.filters {
-	border-bottom: 1px solid var(--line);
-	padding: 0.55rem 0.75rem;
-	display: grid;
-	gap: 0.5rem;
-}
-
-.filter-group {
-	min-width: 0;
-}
-
-.filter-title {
-	font-size: 0.75rem;
-	font-weight: 700;
-	letter-spacing: 0.04em;
-	text-transform: uppercase;
-	color: #5e7187;
-	margin: 0 0 0.35rem;
-}
-
-.filter-scroll {
-	overflow-x: auto;
-	overflow-y: hidden;
-	-webkit-overflow-scrolling: touch;
-	scrollbar-width: none;
-	margin: 0 -0.75rem;
-	padding: 0 0.75rem;
-}
-
-.filter-scroll::-webkit-scrollbar {
-	display: none;
-}
-
-.filter-grid {
-	list-style: none;
-	margin: 0;
-	padding: 0.1rem 0;
-	display: flex;
-	gap: 0.4rem;
-	min-width: max-content;
-}
-
-.filter-grid a {
-	display: block;
-	padding: 0.45rem 0.75rem;
-	border: 1px solid var(--line);
-	border-radius: 999px;
-	font-size: 0.85rem;
-	line-height: 1;
-	background: #fff;
-	white-space: nowrap;
-}
-
-.filter-grid a.selected {
-	background: var(--blue);
-	border-color: var(--blue);
-	color: #fff;
-}
-
-.station-wrap {
-	min-height: 0;
-	overflow-y: auto;
-	-webkit-overflow-scrolling: touch;
-	padding: 0.65rem 0.75rem 2rem;
-}
-
-.section-title {
-	font-size: 0.85rem;
-	font-weight: 600;
-	margin: 0 0 0.5rem;
-	display: flex;
-	justify-content: space-between;
-	gap: 1rem;
-}
-
-#stationCount {
-	font-weight: 400;
-	opacity: 0.65;
-}
-
-#stations {
-	list-style: none;
-	margin: 0;
-	padding: 0;
-}
-
-#stations li + li {
-	margin-top: 0.45rem;
-}
-
-.station-link {
-	display: grid;
-	grid-template-columns: minmax(0, 1fr) auto;
-	align-items: center;
-	gap: 0.75rem;
-	border: 1px solid var(--line);
-	border-radius: 8px;
-	padding: 0.7rem;
-	min-height: 54px;
-}
-
-.station-link.selected {
-	background: var(--soft);
-	border-color: #8fbbe8;
-	color: #102033;
-}
-
-.station-details {
-	min-width: 0;
-}
-
-.equalizer {
-	display: none;
-	width: 32px;
-	height: 22px;
-	image-rendering: pixelated;
-}
-
-.station-link.playing .equalizer {
-	display: block;
-}
-
-.station-name {
-	display: block;
-	font-size: 0.98rem;
-	line-height: 1.25;
-	font-weight: 700;
-}
-
-.metadata {
-	display: block;
-	font-size: 0.8rem;
-	line-height: 1.3;
-	margin-top: 0.25rem;
-	color: inherit;
-	opacity: 0.7;
-}
-
-#stationsMessage {
-	font-size: 0.9rem;
-	line-height: 1.4;
-	padding: 1rem 0;
-	color: #5e7187;
-}
-
-.player-shell {
-	position: sticky;
-	bottom: 0;
-	z-index: 10;
-	background: #fff;
-	border-top: 1px solid var(--line);
-	padding: 0.7rem 0.75rem calc(0.7rem + env(safe-area-inset-bottom, 0px));
-	min-height: var(--player-height);
-}
-
-#player {
-	display: grid;
-	gap: 0.55rem;
-}
-
-.now-playing {
-	min-width: 0;
-}
-
-#playerTitle {
-	font-size: 1rem;
-	font-weight: 700;
-	line-height: 1.2;
-	white-space: nowrap;
-	overflow: hidden;
-	text-overflow: ellipsis;
-}
-
-#playerQuality {
-	font-size: 0.8rem;
-	white-space: nowrap;
-	opacity: 0.7;
-}
-
-#playerDescription {
-	font-size: 0.85rem;
-	line-height: 1.35;
-	margin-top: 0.25rem;
-	display: -webkit-box;
-	-webkit-line-clamp: 2;
-	-webkit-box-orient: vertical;
-	overflow: hidden;
-}
-
-.player-actions {
-	display: grid;
-	grid-template-columns: 1fr 1.25fr 1fr;
-	gap: 0.45rem;
-}
-
-@media screen and (min-width: 650px) {
-	:root {
-		--player-height: 150px;
-	}
-
-	.app {
-		border-left: 1px solid var(--line);
-		border-right: 1px solid var(--line);
-	}
-
-	header {
-		padding-left: 1rem;
-		padding-right: 1rem;
-	}
-
-	.station-wrap {
-		padding-left: 1rem;
-		padding-right: 1rem;
-	}
-
-	.player-shell {
-		padding-left: 1rem;
-		padding-right: 1rem;
-	}
-
-	#player {
-		grid-template-columns: 1fr 330px;
-		align-items: end;
-	}
-
-	.player-actions {
-		grid-column: 2;
-		grid-row: 1;
-	}
-}
+:root{--bg-dark:#000;--bg-card:#1a1a1d;--bg-player:#121212;--accent:#0d6efd;--text-main:#fff;--text-muted:#a0a0a5}
+html,body{height:100%}
+body{background:var(--bg-dark);color:var(--text-main);overflow:hidden;font-family:system-ui,-apple-system,sans-serif;user-select:none;-webkit-user-select:none;-webkit-tap-highlight-color:transparent}
+.top-bar{height:80px;display:flex;align-items:center;justify-content:space-between;padding:0 32px;border-bottom:1px solid #1a1a1d}
+.clock-display{font-size:1.5rem;font-weight:bold;font-variant-numeric:tabular-nums}
+.filter-btn{background:#1a1a1d;color:#fff;border:2px solid #2a2a30;border-radius:50px;padding:10px 24px;font-size:1.2rem;font-weight:600;transition:transform .2s,background-color .2s}
+.filter-btn:active,.filter-btn[aria-expanded="true"]{background:var(--accent);border-color:var(--accent);transform:scale(.95)}
+.custom-dropdown-menu{background:#1a1a1d;border:1px solid #2a2a30;border-radius:16px;width:320px;max-height:60vh;overflow-y:auto;box-shadow:0 10px 30px rgba(0,0,0,.8)}
+.custom-dropdown-menu::-webkit-scrollbar{width:6px}
+.custom-dropdown-menu::-webkit-scrollbar-thumb{background:#333;border-radius:4px}
+.dropdown-item{color:var(--text-main);padding:14px 20px;font-size:1.1rem;transition:background-color .2s;display:flex;align-items:center;background:none;border:none;width:100%;text-align:left}
+.dropdown-item:hover,.dropdown-item:active{background:#2a2a30;color:#fff}
+.dropdown-header{font-size:.9rem;letter-spacing:1px;color:var(--accent);padding:12px 20px 4px}
+.main-content{height:calc(100vh - 210px);overflow-y:auto;padding:24px 32px;scrollbar-width:none}
+.main-content::-webkit-scrollbar{display:none}
+.car-card{background:var(--bg-card);border-radius:24px;padding:20px;cursor:pointer;border:3px solid transparent;transition:transform .2s,border-color .2s;display:flex;flex-direction:column;align-items:center;text-align:center;touch-action:manipulation}
+.car-card:active{transform:scale(.95)}
+.car-card.active{border-color:var(--accent);background:#162032}
+.car-card img{width:120px;height:120px;object-fit:cover;border-radius:50%;margin-bottom:16px;background:#000;box-shadow:0 8px 16px rgba(0,0,0,.5)}
+.station-title{font-size:1.4rem;font-weight:bold;width:100%;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.station-meta{font-size:1rem;color:var(--text-muted);margin-top:4px}
+.bottom-player{position:fixed;bottom:0;left:0;width:100%;height:130px;background:var(--bg-player);border-top:1px solid #2a2a30;display:flex;align-items:center;justify-content:space-between;padding:0 32px;z-index:1000}
+.player-info{display:flex;align-items:center;gap:20px;width:35%;overflow:hidden}
+.player-info img{width:80px;height:80px;border-radius:16px;object-fit:cover;flex-shrink:0;background:#222}
+.player-info-text{flex:1;min-width:0;overflow:hidden}
+.marquee-container{width:100%;overflow:hidden;white-space:nowrap;position:relative}
+.marquee-text{display:inline-block;padding-left:100%;animation:marquee-anim 20s linear infinite;font-size:1.1rem;color:var(--text-muted)}
+@keyframes marquee-anim{0%{transform:translateX(0)}100%{transform:translateX(-100%)}}
+.player-controls{display:flex;align-items:center;justify-content:center;gap:32px;width:30%}
+.ctrl-btn{background:none;border:none;color:var(--text-main);font-size:2.5rem;padding:10px;cursor:pointer;transition:transform .2s}
+.ctrl-btn:active{transform:scale(.85)}
+.play-btn{width:80px;height:80px;background:var(--text-main);color:#000;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:3rem;border:none;cursor:pointer;transition:transform .2s,background-color .2s}
+.play-btn:active{transform:scale(.9)}
+.play-btn.playing{background:var(--accent);color:#fff}
+.eq-animation{display:flex;align-items:flex-end;gap:4px;height:30px;visibility:hidden;width:35%;justify-content:flex-end}
+.eq-animation.playing{visibility:visible}
+.eq-bar{width:6px;background:var(--accent);border-radius:4px;animation:eq-bounce .5s infinite alternate}
+.eq-bar:nth-child(1){animation-delay:.1s;height:40%}
+.eq-bar:nth-child(2){animation-delay:.3s;height:100%}
+.eq-bar:nth-child(3){animation-delay:0s;height:60%}
+.eq-bar:nth-child(4){animation-delay:.2s;height:80%}
+.eq-bar:nth-child(5){animation-delay:.4s;height:50%}
+@keyframes eq-bounce{0%{height:20%}100%{height:100%}}
+.home-btn{color:var(--text-muted);transition:color .2s;text-decoration:none}
+.home-btn:hover{color:var(--text-main)}
 </style>
 </head>
 <body>
-<div class="app">
-	<header>
-		<h1>Wave</h1>
-		<p>Good radio, Simple. By <a href="https://arazgray.com" target="_blank">Araz Gray</a></p>
-		<p class="versions">Other versions: <a href="./">Default</a> &middot; <a href="classic/">Classic</a> &middot; <a href="sk/">SK</a> &middot; <a href="car/">Car</a></p>
-	</header>
-
-	<nav class="filters" aria-label="Filters">
-		<div class="filter-group">
-			<h2 class="filter-title">Country</h2>
-			<div class="filter-scroll"><ul id="countries" class="filter-grid"></ul></div>
-		</div>
-		<div class="filter-group">
-			<h2 class="filter-title">Category</h2>
-			<div class="filter-scroll"><ul id="categories" class="filter-grid"></ul></div>
-		</div>
-	</nav>
-
-	<main class="station-wrap">
-		<h2 class="section-title"><span id="sectionLabel">Stations</span><span id="stationCount"></span></h2>
-		<ul id="stations"></ul>
-		<p id="stationsMessage">No stations found</p>
-	</main>
-
-	<section class="player-shell" aria-label="Player">
-		<div id="player">
-			<div class="now-playing">
-				<div class="player-title-row">
-					<div id="playerTitle">Nothing selected</div>
-					<div id="playerQuality"></div>
-				</div>
-				<p id="playerDescription">Choose filters, then choose a station.</p>
-			</div>
-
-			<div class="player-actions">
-				<button id="prevButton" type="button" class="secondary" disabled>Prev</button>
-				<button id="playButton" type="button" disabled>Play</button>
-				<button id="nextButton" type="button" class="secondary" disabled>Next</button>
-			</div>
-		</div>
-	</section>
+<div class="d-flex flex-column h-100">
+  <header class="top-bar">
+    <div class="d-flex align-items-center">
+      <a href="./" class="home-btn me-4" title="Ana Səhifəyə qayıt"><i class="bi bi-arrow-left-circle-fill fs-2"></i></a>
+      <i class="bi bi-broadcast text-primary me-3" style="font-size:2.2rem;"></i>
+      <h2 class="m-0 fw-bold me-4">Radio</h2>
+      <div class="dropdown">
+        <button class="filter-btn d-flex align-items-center gap-2" id="filterBtn" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+          <i class="bi bi-geo-alt-fill"></i>
+          <span id="filterBtnText">Bütün Ölkələr</span>
+          <i class="bi bi-chevron-down ms-1" style="font-size:1rem;"></i>
+        </button>
+        <ul class="dropdown-menu custom-dropdown-menu mt-2" id="filterMenu"></ul>
+      </div>
+    </div>
+    <div class="clock-display" id="clock">00:00</div>
+  </header>
+  <main class="main-content">
+    <div class="row row-cols-2 row-cols-md-3 row-cols-lg-4 row-cols-xl-5 g-4" id="stationGrid"></div>
+  </main>
 </div>
 
-<audio id="audioPlayer" controls style="display:none"></audio>
+<footer class="bottom-player">
+  <div class="player-info">
+    <img src="./cover-art-placeholder.jpg" id="playerImg" alt="Cover">
+    <div class="player-info-text">
+      <div id="playerName" class="text-white fw-bold text-truncate" style="font-size:1.5rem;">Stansiya Seçin</div>
+      <div class="marquee-container"><div id="playerDesc" class="marquee-text">Siyahıdan radio seçin</div></div>
+    </div>
+  </div>
+  <div class="player-controls">
+    <button class="ctrl-btn" id="prevBtn"><i class="bi bi-skip-backward-fill"></i></button>
+    <button class="play-btn" id="playBtn"><i class="bi bi-play-fill" id="playIcon"></i></button>
+    <button class="ctrl-btn" id="nextBtn"><i class="bi bi-skip-forward-fill"></i></button>
+  </div>
+  <div class="eq-animation" id="eqAnimation">
+    <div class="eq-bar"></div><div class="eq-bar"></div><div class="eq-bar"></div><div class="eq-bar"></div><div class="eq-bar"></div>
+  </div>
+</footer>
+
+<audio id="audioPlayer" style="display:none"></audio>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 <script src="./hls.js"></script>
 <script src="./stations.js"></script>
 <script>
+const grid = document.getElementById('stationGrid');
 const audio = document.getElementById('audioPlayer');
-const countriesList = document.getElementById('countries');
-const categoriesList = document.getElementById('categories');
-const stationsList = document.getElementById('stations');
-const stationsMessage = document.getElementById('stationsMessage');
-const playerTitle = document.getElementById('playerTitle');
-const playerDescription = document.getElementById('playerDescription');
-const playerQuality = document.getElementById('playerQuality');
-const prevButton = document.getElementById('prevButton');
-const playButton = document.getElementById('playButton');
-const nextButton = document.getElementById('nextButton');
-const sectionLabel = document.getElementById('sectionLabel');
-const stationCount = document.getElementById('stationCount');
+const playBtn = document.getElementById('playBtn');
+const playIcon = document.getElementById('playIcon');
+const prevBtn = document.getElementById('prevBtn');
+const nextBtn = document.getElementById('nextBtn');
+const eqAnimation = document.getElementById('eqAnimation');
+const filterMenu = document.getElementById('filterMenu');
+const filterBtn = document.getElementById('filterBtn');
+const filterBtnText = document.getElementById('filterBtnText');
+const playerDesc = document.getElementById('playerDesc');
 
-const countries = [...new Set(stations.map(station => station.country))].sort();
-const categories = [...new Set(stations.map(station => station.category))].sort();
-const storageKey = 'wave:lastStation';
-const DEFAULT_COVER_ART = './cover-art-placeholder.jpg';
+const STORAGE_KEY = 'autoRadio:lastStation';
+const FALLBACK_IMG = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Crect width='200' height='200' fill='%232a2a30'/%3E%3C/svg%3E";
 
-let selectedCountry = 'All';
-let selectedCategory = 'All';
-let currentStations = [];
-let currentStationIndex = -1;
-let currentStation = null;
-let currentUrl = null;
-let currentHls = null;
-let isLoading = false;
+let currentStations = [];   // currently filtered list
+let activeCountry = '';     // '' = all countries
+let currentStation = null;  // the station object being played (independent of the filter)
+let hls = null;
+let playToken = 0;          // invalidates stale play() results on fast switching
 
-function getFilteredStations() {
-	return stations.filter(station =>
-		(selectedCountry === 'All' || station.country === selectedCountry) &&
-		(selectedCategory === 'All' || station.category === selectedCategory)
-	);
+const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const coverOf = s => s.cover || s.logo || FALLBACK_IMG;
+
+// Clock
+function updateClock() {
+    document.getElementById('clock').textContent =
+        new Date().toLocaleTimeString('az-AZ', { hour: '2-digit', minute: '2-digit' });
 }
+setInterval(updateClock, 1000);
+updateClock();
 
-function getSectionLabel() {
-	if (selectedCountry !== 'All' && selectedCategory !== 'All') return selectedCountry + ' · ' + selectedCategory;
-	if (selectedCountry !== 'All') return selectedCountry;
-	if (selectedCategory !== 'All') return selectedCategory;
-	return 'All stations';
-}
-
-function applyFilters() {
-	const keepPlayer = currentStation && (currentUrl || isLoading);
-	currentStations = getFilteredStations();
-	currentStationIndex = keepPlayer ? currentStations.findIndex(station => station.url === currentStation.url) : -1;
-
-	highlightFilter(countriesList, selectedCountry);
-	highlightFilter(categoriesList, selectedCategory);
-	renderStations(currentStations);
-	highlightStation(currentStationIndex);
-	if (!keepPlayer) resetPlayerSelection('Choose a station from the list below.');
-}
-
-function renderFilters() {
-	renderFilterList(countriesList, ['All', ...countries], selectedCountry, value => {
-		selectedCountry = value;
-		applyFilters();
-	});
-	renderFilterList(categoriesList, ['All', ...categories], selectedCategory, value => {
-		selectedCategory = value;
-		applyFilters();
-	});
-}
-
-function renderFilterList(listEl, values, selectedValue, onSelect) {
-	listEl.innerHTML = '';
-
-	values.forEach(value => {
-		const li = document.createElement('li');
-		const link = document.createElement('a');
-		link.href = '#';
-		link.textContent = value;
-		link.setAttribute('role', 'tab');
-		const isSelected = value === selectedValue;
-		link.classList.toggle('selected', isSelected);
-		link.setAttribute('aria-selected', isSelected ? 'true' : 'false');
-		link.addEventListener('click', event => {
-			event.preventDefault();
-			onSelect(value);
-			link.scrollIntoView({ inline: 'nearest', block: 'nearest' });
-		});
-
-		li.appendChild(link);
-		listEl.appendChild(li);
-	});
-}
-
-function highlightFilter(listEl, selectedValue) {
-	listEl.querySelectorAll('a').forEach(link => {
-		const isSelected = link.textContent === selectedValue;
-		link.classList.toggle('selected', isSelected);
-		link.setAttribute('aria-selected', isSelected ? 'true' : 'false');
-	});
-}
-
-function renderStations(list) {
-	stationsList.innerHTML = '';
-	stationsMessage.style.display = list.length ? 'none' : 'block';
-	sectionLabel.textContent = getSectionLabel();
-	stationCount.textContent = list.length ? list.length + ' station' + (list.length === 1 ? '' : 's') : '';
-
-	list.forEach((station, index) => {
-		const li = document.createElement('li');
-		const link = document.createElement('a');
-		const details = document.createElement('span');
-		const name = document.createElement('span');
-		const meta = document.createElement('span');
-		const equalizer = document.createElement('img');
-
-		link.href = '#';
-		link.className = 'station-link';
-		link.dataset.index = String(index);
-		link.setAttribute('aria-current', 'false');
-
-		details.className = 'station-details';
-
-		name.className = 'station-name';
-		name.textContent = station.name;
-
-		meta.className = 'metadata';
-		meta.textContent = station.country + ' · ' + station.category + ' · ' + station.quality;
-
-		equalizer.className = 'equalizer';
-		equalizer.src = 'equalizer.gif';
-		equalizer.alt = '';
-		equalizer.setAttribute('aria-hidden', 'true');
-
-		details.appendChild(name);
-		details.appendChild(meta);
-		link.appendChild(details);
-		link.appendChild(equalizer);
-		link.addEventListener('click', event => {
-			event.preventDefault();
-			selectStation(index, true);
-		});
-
-		li.appendChild(link);
-		stationsList.appendChild(li);
-	});
-}
-
-function selectStation(index, autoplay) {
-	if (!currentStations[index]) return;
-
-	const wasPlaying = !!currentUrl && !audio.paused;
-	const station = currentStations[index];
-	currentStationIndex = index;
-	currentStation = station;
-
-	highlightStation(index);
-	setPlayerStation(station);
-	setControlsEnabled(true);
-	rememberStation(station);
-
-	if (autoplay || wasPlaying) {
-		playStation(station);
-	}
-}
-
-function highlightStation(index) {
-	document.querySelectorAll('#stations .station-link').forEach(link => {
-		const isSelected = Number(link.dataset.index) === index;
-		link.classList.toggle('selected', isSelected);
-		link.classList.toggle('playing', isSelected && currentUrl && !audio.paused);
-		link.setAttribute('aria-current', isSelected ? 'true' : 'false');
-		if (isSelected) link.scrollIntoView({ block: 'nearest' });
-	});
-}
-
-function setPlayerStation(station) {
-	playerTitle.textContent = station.name;
-	playerDescription.textContent = station.description;
-	playerQuality.textContent = station.category + ' · ' + station.quality;
-	playButton.textContent = currentUrl === station.url && !audio.paused ? 'Stop' : 'Play';
-	highlightStation(currentStationIndex);
-	document.title = station.name + ' · Wave Modern';
-}
-
-function resetPlayerSelection(message) {
-	stopAudio();
-	currentStation = null;
-	playerTitle.textContent = 'Nothing selected';
-	playerDescription.textContent = message || 'Choose a station from the list below.';
-	playerQuality.textContent = '';
-	playButton.textContent = 'Play';
-	setControlsEnabled(false);
-	document.title = 'Wave Modern';
-}
-
-function setControlsEnabled(enabled) {
-	prevButton.disabled = !enabled;
-	playButton.disabled = !enabled;
-	nextButton.disabled = !enabled;
-}
-
-function destroyHls() {
-	if (currentHls) {
-		currentHls.destroy();
-		currentHls = null;
-	}
-
-	if (audio.hls) {
-		audio.hls.destroy();
-		audio.hls = null;
-	}
-}
-
-function stopAudio() {
-	isLoading = false;
-	destroyHls();
-	audio.pause();
-	audio.removeAttribute('src');
-	audio.load();
-	currentUrl = null;
-	playButton.textContent = 'Play';
-	highlightStation(currentStationIndex);
-}
-
-function togglePlay() {
-	const station = currentStations[currentStationIndex] || currentStation;
-	if (!station || isLoading) return;
-
-	if (currentUrl === station.url && !audio.paused) {
-		stopAudio();
-		return;
-	}
-
-	playStation(station);
-}
-
-function playStation(station) {
-	if (!station) return;
-
-	stopAudio();
-	currentStation = station;
-	isLoading = true;
-	currentUrl = station.url;
-	playButton.textContent = 'Loading';
-	updateMediaSession(station);
-
-	const onPlaySuccess = () => {
-		isLoading = false;
-		playButton.textContent = 'Stop';
-		highlightStation(currentStationIndex);
-		document.title = station.name + ' · Wave Modern';
-	};
-
-	const onPlayError = error => {
-		isLoading = false;
-		stopAudio();
-	};
-
-	if (station.url.includes('.m3u8') && window.Hls && Hls.isSupported()) {
-		currentHls = new Hls();
-		audio.hls = currentHls;
-		currentHls.loadSource(station.url);
-		currentHls.attachMedia(audio);
-		currentHls.on(Hls.Events.MANIFEST_PARSED, () => {
-			audio.play().then(onPlaySuccess).catch(onPlayError);
-		});
-		currentHls.on(Hls.Events.ERROR, (event, data) => {
-			if (data && data.fatal) {
-				onPlayError(data.details || 'HLS error');
-			}
-		});
-		return;
-	}
-
-	if (station.url.includes('.m3u8') && audio.canPlayType('application/vnd.apple.mpegurl')) {
-		audio.src = station.url;
-		audio.play().then(onPlaySuccess).catch(onPlayError);
-		return;
-	}
-
-	audio.src = station.url;
-	audio.play().then(onPlaySuccess).catch(onPlayError);
-}
-
-function playNextStation() {
-	moveStation(1);
-}
-
-function playPreviousStation() {
-	moveStation(-1);
-}
-
-function moveStation(direction) {
-	if (!currentStations.length) return;
-
-	let nextIndex;
-	if (currentStationIndex < 0) {
-		nextIndex = direction > 0 ? 0 : currentStations.length - 1;
-	} else {
-		nextIndex = (currentStationIndex + direction + currentStations.length) % currentStations.length;
-	}
-
-	selectStation(nextIndex, true);
-}
-
-function resolveArtworkSrc(src) {
-	try {
-		return new URL(src, document.baseURI).href;
-	} catch (error) {
-		return src;
-	}
-}
-
-function getStationArtwork(station) {
-	// Always include the default cover art after the station cover,
-	// so lockscreen / Dynamic Island still has an image when a station
-	// cover is missing, empty, or not yet uploaded (404).
-	const sizes = ['96x96', '128x128', '192x192', '512x512'];
-	const artwork = [];
-
-	if (station.cover) {
-		const stationSrc = resolveArtworkSrc(station.cover);
-		sizes.forEach(size => {
-			artwork.push({ src: stationSrc, sizes: size, type: 'image/jpeg' });
-		});
-	}
-
-	const defaultSrc = resolveArtworkSrc(DEFAULT_COVER_ART);
-	sizes.forEach(size => {
-		artwork.push({ src: defaultSrc, sizes: size, type: 'image/jpeg' });
-	});
-
-	return artwork;
-}
-
-function updateMediaSession(station) {
-	if ('mediaSession' in navigator) {
-		navigator.mediaSession.metadata = new MediaMetadata({
-			title: station.name,
-			artist: station.category,
-			album: station.country,
-			artwork: getStationArtwork(station)
-		});
-
-		navigator.mediaSession.setActionHandler('nexttrack', playNextStation);
-		navigator.mediaSession.setActionHandler('previoustrack', playPreviousStation);
-		navigator.mediaSession.setActionHandler('play', () => {
-			const station = currentStations[currentStationIndex] || currentStation;
-			if (station) playStation(station);
-		});
-		navigator.mediaSession.setActionHandler('pause', () => {
-			stopAudio();
-		});
-	}
-}
-
-function rememberStation(station) {
-	try {
-		localStorage.setItem(storageKey, JSON.stringify({
-			country: station.country,
-			category: station.category,
-			name: station.name
-		}));
-	} catch (error) {
-	}
+function initApp() {
+    if (typeof stations === 'undefined' || !Array.isArray(stations)) {
+        grid.innerHTML = '<h3 class="text-danger w-100 text-center mt-5">stations.js tapılmadı!</h3>';
+        return;
+    }
+    currentStations = [...stations];
+    renderDropdownMenu();
+    renderGrid();
+    restoreLastStation();
 }
 
 function restoreLastStation() {
-	try {
-		const saved = JSON.parse(localStorage.getItem(storageKey) || 'null');
-		if (!saved || !saved.name) return false;
-
-		if (saved.country && countries.includes(saved.country)) {
-			selectedCountry = saved.country;
-		}
-		if (saved.category && categories.includes(saved.category)) {
-			selectedCategory = saved.category;
-		}
-
-		applyFilters();
-
-		const index = currentStations.findIndex(station => station.name === saved.name);
-		if (index >= 0) {
-			selectStation(index, false);
-		} else {
-			// Saved station is outside current filters: fall back to full list.
-			selectedCountry = 'All';
-			selectedCategory = 'All';
-			applyFilters();
-			const fallbackIndex = currentStations.findIndex(station => station.name === saved.name);
-			if (fallbackIndex >= 0) {
-				selectStation(fallbackIndex, false);
-			}
-		}
-
-		return index >= 0;
-	} catch (error) {
-		return false;
-	}
+    try {
+        const saved = JSON.parse(localStorage.getItem(STORAGE_KEY));
+        if (!saved) return;
+        const st = stations.find(s => s.url === saved.url) || stations.find(s => s.name === saved.name);
+        if (st) playStation(st, false);
+    } catch (e) {}
 }
 
-playButton.addEventListener('click', togglePlay);
-prevButton.addEventListener('click', playPreviousStation);
-nextButton.addEventListener('click', playNextStation);
+// ---------- Country filter ----------
+function renderDropdownMenu() {
+    const countries = [...new Set(stations.map(s => s.country).filter(Boolean))]
+        .sort((a, b) => a.localeCompare(b));
+    const all = [{ value: '', label: 'Bütün Ölkələr' }, ...countries.map(c => ({ value: c, label: c }))];
 
-document.addEventListener('keydown', event => {
-	if (event.target && ['INPUT', 'TEXTAREA', 'SELECT'].includes(event.target.tagName)) return;
+    filterMenu.innerHTML = '<h6 class="dropdown-header fw-bold text-uppercase">Ölkələr</h6>' +
+        all.map(c => `
+            <li><button type="button" class="dropdown-item" data-country="${esc(c.value)}">
+                <i class="bi bi-check2 fs-4 me-2 ${activeCountry === c.value ? 'text-primary' : 'opacity-0'}"></i>
+                ${esc(c.label)}
+            </button></li>`).join('');
 
-	if (event.key === 'ArrowRight') {
-		event.preventDefault();
-		playNextStation();
-	}
-
-	if (event.key === 'ArrowLeft') {
-		event.preventDefault();
-		playPreviousStation();
-	}
-
-	if (event.key === ' ' && currentStation) {
-		event.preventDefault();
-		togglePlay();
-	}
-});
-
-audio.addEventListener('ended', () => {
-	playButton.textContent = 'Play';
-	currentUrl = null;
-	highlightStation(currentStationIndex);
-});
-
-audio.addEventListener('error', () => {
-	if (currentUrl) {
-		stopAudio();
-	}
-});
-
-renderFilters();
-
-if (!restoreLastStation()) {
-	applyFilters();
+    filterBtnText.textContent = activeCountry || 'Bütün Ölkələr';
 }
+
+filterMenu.addEventListener('click', e => {
+    const btn = e.target.closest('[data-country]');
+    if (!btn) return;
+    setFilter(btn.dataset.country);
+    bootstrap.Dropdown.getOrCreateInstance(filterBtn).hide();
+});
+
+function setFilter(country) {
+    activeCountry = country;
+    currentStations = country ? stations.filter(s => s.country === country) : [...stations];
+    renderDropdownMenu();
+    renderGrid();
+    document.querySelector('.main-content').scrollTop = 0;
+}
+
+// ---------- Grid ----------
+function renderGrid() {
+    if (currentStations.length === 0) {
+        grid.innerHTML = '<h4 class="text-muted w-100 text-center mt-5">Seçilmiş ölkəyə uyğun stansiya tapılmadı.</h4>';
+        return;
+    }
+    grid.innerHTML = currentStations.map((st, i) => `
+        <div class="col">
+            <div class="car-card ${currentStation && currentStation.url === st.url ? 'active' : ''}" data-index="${i}">
+                <img src="${esc(coverOf(st))}" alt="${esc(st.name)}" onerror="this.onerror=null;this.src='${FALLBACK_IMG}'">
+                <div class="station-title">${esc(st.name)}</div>
+                <div class="station-meta">${esc(st.country || 'Radio')}</div>
+            </div>
+        </div>`).join('');
+}
+
+grid.addEventListener('click', e => {
+    const card = e.target.closest('.car-card');
+    if (card) playStation(currentStations[+card.dataset.index]);
+});
+
+function markActive() {
+    grid.querySelectorAll('.car-card').forEach((el, i) => {
+        el.classList.toggle('active', !!currentStation && currentStations[i].url === currentStation.url);
+    });
+}
+
+// ---------- Media Session ----------
+function updateMediaSession(station) {
+    if (!('mediaSession' in navigator)) return;
+    const cover = coverOf(station);
+    navigator.mediaSession.metadata = new MediaMetadata({
+        title: station.name,
+        artist: station.country || 'Radio Stream',
+        album: station.category || 'Auto Radio',
+        artwork: [{ src: cover, sizes: '512x512' }]
+    });
+    navigator.mediaSession.setActionHandler('play', togglePlay);
+    navigator.mediaSession.setActionHandler('pause', () => audio.pause());
+    navigator.mediaSession.setActionHandler('previoustrack', () => step(-1));
+    navigator.mediaSession.setActionHandler('nexttrack', () => step(1));
+}
+
+// ---------- Playback ----------
+function setUI(state) { // 'idle' | 'loading' | 'playing'
+    playIcon.className = state === 'playing' ? 'bi bi-pause-fill'
+                       : state === 'loading' ? 'bi bi-hourglass-split' : 'bi bi-play-fill';
+    playBtn.classList.toggle('playing', state === 'playing');
+    eqAnimation.classList.toggle('playing', state === 'playing');
+}
+
+function playStation(station, autoPlay = true) {
+    if (!station) return;
+    currentStation = station;
+    try { localStorage.setItem(STORAGE_KEY, JSON.stringify({ name: station.name, url: station.url })); } catch (e) {}
+
+    document.getElementById('playerName').textContent = station.name;
+    const img = document.getElementById('playerImg');
+    img.onerror = () => { img.onerror = null; img.src = FALLBACK_IMG; };
+    img.src = coverOf(station);
+
+    playerDesc.style.animation = 'none';
+    playerDesc.offsetHeight;
+    playerDesc.style.animation = null;
+    playerDesc.textContent = station.description || station.country || 'Siyahıdan radio seçin';
+
+    markActive();
+    updateMediaSession(station);
+
+    if (autoPlay) playAudioSource(station.url);
+    else { stopSource(); setUI('idle'); }
+}
+
+function stopSource() {
+    playToken++;
+    if (hls) { hls.destroy(); hls = null; }
+    audio.pause();
+    audio.removeAttribute('src');
+    audio.load();
+}
+
+function playAudioSource(url) {
+    stopSource();
+    const token = playToken;
+    setUI('loading');
+
+    const onError = () => {
+        if (token !== playToken) return;
+        setUI('idle');
+        playerDesc.textContent = 'XƏTA: Siqnal yoxdur';
+    };
+    const start = () => {
+        audio.play().catch(err => { if (err.name !== 'AbortError') onError(); });
+    };
+
+    if (/\.m3u8/i.test(url) && typeof Hls !== 'undefined' && Hls.isSupported()) {
+        hls = new Hls();
+        hls.loadSource(url);
+        hls.attachMedia(audio);
+        hls.on(Hls.Events.MANIFEST_PARSED, start);
+        hls.on(Hls.Events.ERROR, (ev, data) => {
+            if (!data.fatal) return;
+            if (data.type === Hls.ErrorTypes.NETWORK_ERROR) hls.startLoad();
+            else if (data.type === Hls.ErrorTypes.MEDIA_ERROR) hls.recoverMediaError();
+            else onError();
+        });
+    } else {
+        audio.src = url;
+        start();
+    }
+    audio.onerror = onError;
+}
+
+function togglePlay() {
+    if (!currentStation) {
+        if (currentStations.length) playStation(currentStations[0]);
+        return;
+    }
+    if (audio.paused) playAudioSource(currentStation.url); // live stream: reconnect instead of resuming stale buffer
+    else audio.pause();
+}
+
+// prev/next walk the *filtered* list; if the playing station isn't in it, start from the edge
+function step(dir) {
+    const n = currentStations.length;
+    if (!n) return;
+    const idx = currentStation ? currentStations.findIndex(s => s.url === currentStation.url) : -1;
+    const next = idx === -1 ? (dir > 0 ? 0 : n - 1) : (idx + dir + n) % n;
+    playStation(currentStations[next]);
+}
+
+playBtn.addEventListener('click', togglePlay);
+prevBtn.addEventListener('click', () => step(-1));
+nextBtn.addEventListener('click', () => step(1));
+
+audio.addEventListener('playing', () => setUI('playing'));
+audio.addEventListener('waiting', () => { if (!audio.paused) setUI('loading'); });
+audio.addEventListener('pause', () => { if (currentStation && audio.src !== '') setUI('idle'); });
+
+window.addEventListener('DOMContentLoaded', initApp);
 
 if ('serviceWorker' in navigator) {
-	window.addEventListener('load', () => {
-		navigator.serviceWorker.register('sw.js').catch(() => {
-		});
-	});
+    window.addEventListener('load', () => navigator.serviceWorker.register('sw.js').catch(() => {}));
 }
 </script>
 </body>

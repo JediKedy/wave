@@ -1,0 +1,1126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<base href="../">
+<link rel="icon" href="icon.svg">
+<link rel="apple-touch-icon" href="icon.svg">
+<link rel="manifest" href="manifest-car.json">
+<meta name="theme-color" content="#000000">
+<title>Wave Car</title>
+<style>
+:root {
+    font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+    font-size: 16px;
+    color: #fff;
+    background: #000;
+    --amber: #ffb833;
+    --amber-dim: rgba(255, 184, 51, 0.35);
+    --green: #39ff14;
+    --red: #ff3333;
+    --panel: #141417;
+    --line: #2a2a2e;
+    --muted: #9a9aa0;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+html,
+body {
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    background: #000;
+    color: #fff;
+}
+
+body {
+    min-height: 100dvh;
+    overflow: hidden;
+}
+
+button,
+select {
+    font: inherit;
+    color: #fff;
+    background: linear-gradient(180deg, #1c1c21 0%, var(--panel) 100%);
+    border: 1px solid var(--line);
+    border-radius: 18px;
+    cursor: pointer;
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: transparent;
+    user-select: none;
+    -webkit-user-select: none;
+    transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: inset 0 1px 0 rgba(255,255,255,0.05);
+}
+
+button:focus-visible,
+select:focus-visible {
+    outline: 3px solid var(--amber);
+    outline-offset: 3px;
+}
+
+button:active {
+    transform: scale(0.95);
+    background: var(--panel);
+}
+
+.car {
+    width: 100%;
+    max-width: 900px;
+    height: 100dvh;
+    margin: 0 auto;
+    display: grid;
+    grid-template-rows: auto minmax(0, 1fr) auto auto auto;
+    gap: 0.55rem;
+    padding: 0.7rem 0.9rem calc(0.7rem + env(safe-area-inset-bottom, 0px));
+    background: #000;
+}
+
+header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+}
+
+.brand {
+    font-size: 1.05rem;
+    font-weight: 800;
+    letter-spacing: 0.2em;
+    white-space: nowrap;
+}
+
+.brand span {
+    color: var(--amber);
+}
+
+.header-right {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-left: auto;
+}
+
+/* Header FM 1 / FM 2 / FM 3 Bank Selector */
+.preset-banks {
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+    background: var(--panel);
+    padding: 0.2rem;
+    border-radius: 999px;
+    border: 1px solid var(--line);
+}
+
+.bank-btn {
+    border: none;
+    background: transparent;
+    box-shadow: none;
+    border-radius: 999px;
+    font-size: 0.75rem;
+    font-weight: 800;
+    letter-spacing: 0.08em;
+    color: var(--muted);
+    padding: 0.35rem 0.65rem;
+    white-space: nowrap;
+}
+
+.bank-btn.active {
+    background: var(--amber);
+    color: #000;
+    box-shadow: 0 0 10px rgba(255, 184, 51, 0.3);
+}
+
+.country-select {
+    appearance: none;
+    -webkit-appearance: none;
+    padding: 0.4rem 1.8rem 0.4rem 0.75rem;
+    font-size: 0.8rem;
+    font-weight: 700;
+    letter-spacing: 0.03em;
+    border-radius: 999px;
+    background-color: var(--panel);
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%23ffb833' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 0.65rem center;
+    max-width: 145px;
+    text-overflow: ellipsis;
+}
+
+.country-select option {
+    background: var(--panel);
+    color: #fff;
+}
+
+.clock {
+    font-size: 1.45rem;
+    font-weight: 700;
+    font-variant-numeric: tabular-nums;
+    letter-spacing: 0.05em;
+    white-space: nowrap;
+}
+
+/* Horizontal Stage: Logo on Left, Info on Right */
+.stage {
+    min-height: 0;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    text-align: left;
+    gap: 1.25rem;
+    background: linear-gradient(180deg, #1a1a1f 0%, #0d0d10 100%);
+    border: 1px solid var(--line);
+    border-radius: 22px;
+    padding: 0.85rem 1.4rem;
+    overflow: hidden;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.8), inset 0 1px 0 rgba(255,255,255,0.05);
+}
+
+.stage-logo {
+    width: clamp(72px, 14vh, 115px);
+    height: clamp(72px, 14vh, 115px);
+    border-radius: 20px;
+    object-fit: cover;
+    background: #000;
+    border: 2px solid var(--line);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.6);
+    flex-shrink: 0;
+}
+
+.stage-info {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: center;
+    gap: 0.35rem;
+    min-width: 0;
+    flex: 1;
+}
+
+.status {
+    font-size: 0.78rem;
+    font-weight: 800;
+    letter-spacing: 0.25em;
+    padding: 0.25rem 0.75rem;
+    border-radius: 999px;
+    border: 2px solid var(--line);
+    color: var(--muted);
+}
+
+.status.loading {
+    color: var(--amber);
+    border-color: var(--amber);
+    animation: pulse 0.9s ease-in-out infinite alternate;
+}
+
+.status.playing {
+    color: var(--green);
+    border-color: var(--green);
+}
+
+.status.error {
+    color: var(--red);
+    border-color: var(--red);
+}
+
+@keyframes pulse {
+    from { opacity: 0.55; }
+    to { opacity: 1; }
+}
+
+.station {
+    margin: 0;
+    font-size: clamp(1.5rem, 5vw, 2.5rem);
+    font-weight: 800;
+    line-height: 1.1;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    word-break: break-word;
+}
+
+.meta {
+    margin: 0;
+    font-size: clamp(0.9rem, 2.8vw, 1.1rem);
+    color: var(--muted);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 100%;
+}
+
+.controls {
+    display: grid;
+    grid-template-columns: 1fr 1.4fr 1fr;
+    gap: 0.6rem;
+}
+
+.controls button {
+    min-height: 92px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 0.15rem;
+}
+
+.controls .glyph {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.controls .glyph svg {
+    width: 34px;
+    height: 34px;
+    fill: currentColor;
+    transition: all 0.25s ease;
+}
+
+.controls .lbl {
+    font-size: 0.8rem;
+    font-weight: 800;
+    letter-spacing: 0.2em;
+    color: var(--muted);
+    margin-top: 4px;
+}
+
+#playButton {
+    background: linear-gradient(180deg, #ffc95c 0%, var(--amber) 100%);
+    border-color: var(--amber);
+    color: #000;
+}
+
+#playButton .lbl {
+    color: #000;
+}
+
+#playButton.playing {
+    background: rgba(57, 255, 20, 0.08);
+    color: var(--green);
+    border-color: rgba(57, 255, 20, 0.4);
+    box-shadow: 0 0 24px rgba(57, 255, 20, 0.15), inset 0 0 12px rgba(57, 255, 20, 0.05);
+}
+
+#playButton.playing .lbl {
+    color: var(--green);
+}
+
+.presets {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 0.55rem;
+}
+
+.presets button {
+    min-height: 68px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 0.1rem;
+    padding: 0.35rem 0.5rem;
+}
+
+.presets button.active {
+    background: var(--amber-dim);
+    border-color: var(--amber);
+    box-shadow: 0 4px 16px rgba(255, 184, 51, 0.15);
+}
+
+.presets button.saved-flash {
+    border-color: var(--green);
+}
+
+.pnum {
+    font-size: 0.72rem;
+    font-weight: 800;
+    letter-spacing: 0.2em;
+    color: var(--amber);
+}
+
+.pname {
+    font-size: 0.98rem;
+    font-weight: 700;
+    line-height: 1.2;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 100%;
+}
+
+.pname.empty {
+    color: var(--muted);
+    font-weight: 400;
+    font-size: 0.82rem;
+}
+
+footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.6rem;
+}
+
+#position {
+    font-size: 0.95rem;
+    font-weight: 700;
+    font-variant-numeric: tabular-nums;
+    color: var(--muted);
+}
+
+.versions {
+    font-size: 0.78rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    color: var(--muted);
+    white-space: nowrap;
+}
+
+.versions a {
+    color: var(--amber);
+    text-decoration: none;
+    padding: 0.4rem 0.3rem;
+}
+
+.hint {
+    margin: 0;
+    text-align: center;
+    font-size: 0.75rem;
+    color: var(--muted);
+}
+
+@media (max-width: 480px) {
+    .brand {
+        font-size: 0.95rem;
+        letter-spacing: 0.15em;
+    }
+    .bank-btn {
+        padding: 0.3rem 0.5rem;
+        font-size: 0.7rem;
+    }
+    .country-select {
+        max-width: 115px;
+        font-size: 0.75rem;
+        padding: 0.35rem 1.5rem 0.35rem 0.6rem;
+    }
+    .clock {
+        font-size: 1.2rem;
+    }
+}
+
+@media (orientation: landscape) and (max-height: 540px) {
+    .car {
+        gap: 0.4rem;
+        padding-top: 0.45rem;
+    }
+
+    .stage {
+        padding: 0.5rem 1.2rem;
+        gap: 1rem;
+    }
+
+    .stage-logo {
+        width: 64px;
+        height: 64px;
+    }
+
+    .station {
+        font-size: clamp(1.3rem, 5vh, 1.9rem);
+    }
+
+    .controls button {
+        min-height: 70px;
+    }
+
+    .presets {
+        grid-template-columns: repeat(6, minmax(0, 1fr));
+    }
+
+    .presets button {
+        min-height: 54px;
+    }
+
+    .hint {
+        display: none;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    * {
+        animation-duration: 1ms !important;
+        transition-duration: 1ms !important;
+    }
+}
+</style>
+</head>
+<body>
+<div class="car">
+    <header>
+        <div class="brand">WAVE <span>CAR</span></div>
+        <div class="header-right">
+            <div class="preset-banks" role="tablist" aria-label="FM Preset Banks">
+                <button type="button" class="bank-btn active" data-bank="0">FM 1</button>
+                <button type="button" class="bank-btn" data-bank="1">FM 2</button>
+                <button type="button" class="bank-btn" data-bank="2">FM 3</button>
+            </div>
+            <select id="countrySelect" class="country-select" aria-label="Select country">
+                <option value="All">All Countries</option>
+            </select>
+            <div class="clock" id="clock">--:--</div>
+        </div>
+    </header>
+
+    <main class="stage" aria-live="polite">
+        <img id="stationLogo" class="stage-logo" src="./cover-art-placeholder.jpg" alt="Station logo" onerror="this.src='./cover-art-placeholder.jpg'" />
+        <div class="stage-info">
+            <div class="status" id="status">STOPPED</div>
+            <h1 class="station" id="stationName">Ready</h1>
+            <p class="meta" id="stationMeta">Pick a preset, or press play</p>
+        </div>
+    </main>
+
+    <div class="controls">
+        <button id="prevButton" type="button" aria-label="Previous station">
+            <span class="glyph" aria-hidden="true">
+                <svg viewBox="0 0 24 24"><path d="M19 20L9 12l10-8v16zM5 19h2V5H5v14z"/></svg>
+            </span>
+            <span class="lbl">PREV</span>
+        </button>
+        <button id="playButton" type="button" aria-label="Play or stop">
+            <span class="glyph" id="playGlyph" aria-hidden="true">
+                <svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+            </span>
+            <span class="lbl" id="playLabel">PLAY</span>
+        </button>
+        <button id="nextButton" type="button" aria-label="Next station">
+            <span class="glyph" aria-hidden="true">
+                <svg viewBox="0 0 24 24"><path d="M5 4l10 8-10 8V4zm14 0h-2v16h2V4z"/></svg>
+            </span>
+            <span class="lbl">NEXT</span>
+        </button>
+    </div>
+
+    <div class="presets" id="presets" aria-label="Preset stations"></div>
+    <p class="hint">Tap a preset to play &middot; hold a preset to save the current station</p>
+
+    <footer>
+        <nav class="versions" aria-label="Other versions">
+            <a href="./">DEFAULT</a> &middot; <a href="modern/">MODERN</a> &middot; <a href="classic/">CLASSIC</a> &middot; <a href="sk/">SK</a>
+        </nav>
+        <div id="position">&ndash; / &ndash;</div>
+    </footer>
+</div>
+
+<audio id="audioPlayer" style="display:none"></audio>
+<script src="./hls.js"></script>
+<script src="./stations.js"></script>
+<script>
+const audio = document.getElementById('audioPlayer');
+const statusEl = document.getElementById('status');
+const stationLogoEl = document.getElementById('stationLogo');
+const stationNameEl = document.getElementById('stationName');
+const stationMetaEl = document.getElementById('stationMeta');
+const playButton = document.getElementById('playButton');
+const playGlyph = document.getElementById('playGlyph');
+const playLabel = document.getElementById('playLabel');
+const prevButton = document.getElementById('prevButton');
+const nextButton = document.getElementById('nextButton');
+const presetsEl = document.getElementById('presets');
+const positionEl = document.getElementById('position');
+const countrySelect = document.getElementById('countrySelect');
+const bankButtons = document.querySelectorAll('.bank-btn');
+
+const storageKey = 'wave:lastStation';
+const presetsKey = 'wave:carPresets';
+const BANK_COUNT = 3;
+const PRESETS_PER_BANK = 6;
+const TOTAL_PRESETS = BANK_COUNT * PRESETS_PER_BANK;
+const DEFAULT_COVER_ART = './cover-art-placeholder.jpg';
+
+let selectedCountry = 'All';
+let filteredStations = [...stations];
+let currentBank = 0;
+
+let currentIndex = -1;
+let currentStation = null;
+let currentUrl = null;
+let currentHls = null;
+let isLoading = false;
+let wakeLock = null;
+
+let presets = loadPresets();
+
+// --- Haptics ---
+function triggerHaptic() {
+    try {
+        if (navigator.vibrate) navigator.vibrate(15);
+    } catch (error) {}
+}
+
+// --- Clock (Self-adjusting to prevent drift) ---
+function tickClock() {
+    const now = new Date();
+    const hh = String(now.getHours()).padStart(2, '0');
+    const mm = String(now.getMinutes()).padStart(2, '0');
+    const text = hh + ':' + mm;
+    if (document.getElementById('clock').textContent !== text) {
+        document.getElementById('clock').textContent = text;
+    }
+    const msToNextSecond = 1000 - now.getMilliseconds();
+    setTimeout(tickClock, msToNextSecond);
+}
+tickClock();
+
+// --- Country Filter ---
+function initCountryFilter() {
+    const countries = [...new Set(stations.map(s => s.country).filter(Boolean))].sort();
+    countries.forEach(country => {
+        const opt = document.createElement('option');
+        opt.value = country;
+        opt.textContent = country;
+        countrySelect.appendChild(opt);
+    });
+
+    countrySelect.addEventListener('change', () => {
+        triggerHaptic();
+        selectedCountry = countrySelect.value;
+        filteredStations = selectedCountry === 'All'
+            ? [...stations]
+            : stations.filter(s => s.country === selectedCountry);
+
+        if (filteredStations.length > 0) {
+            selectStation(0, true);
+        } else {
+            currentIndex = -1;
+            renderNowPlaying();
+        }
+    });
+}
+
+// --- Status / now playing ---
+function setStatus(state) {
+    statusEl.classList.remove('loading', 'playing', 'error');
+    if (state === 'loading') {
+        statusEl.textContent = 'LOADING';
+        statusEl.classList.add('loading');
+    } else if (state === 'playing') {
+        statusEl.textContent = 'PLAYING';
+        statusEl.classList.add('playing');
+    } else if (state === 'error') {
+        statusEl.textContent = 'ERROR';
+        statusEl.classList.add('error');
+    } else {
+        statusEl.textContent = 'STOPPED';
+    }
+}
+
+function renderNowPlaying() {
+    if (!currentStation) {
+        stationNameEl.textContent = 'Ready';
+        stationMetaEl.textContent = 'Pick a preset, or press play';
+        stationLogoEl.src = DEFAULT_COVER_ART;
+        positionEl.textContent = '– / ' + filteredStations.length;
+        document.title = 'Wave Car';
+        return;
+    }
+
+    stationNameEl.textContent = currentStation.name;
+    stationMetaEl.textContent = currentStation.country + ' · ' + currentStation.category;
+    stationLogoEl.src = currentStation.cover || currentStation.logo || DEFAULT_COVER_ART;
+    const pos = currentIndex >= 0 ? (currentIndex + 1) : '–';
+    positionEl.textContent = pos + ' / ' + filteredStations.length;
+    document.title = currentStation.name + ' · Wave Car';
+}
+
+function renderPlayButton() {
+    const playing = !!currentUrl && !audio.paused;
+    const playIcon = '<svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>';
+    const stopIcon = '<svg viewBox="0 0 24 24"><path d="M6 6h12v12H6z"/></svg>';
+    
+    playGlyph.innerHTML = playing ? stopIcon : playIcon;
+    playLabel.textContent = isLoading ? 'WAIT' : (playing ? 'STOP' : 'PLAY');
+    playButton.classList.toggle('playing', playing);
+    playButton.setAttribute('aria-label', playing ? 'Stop' : 'Play');
+}
+
+// --- Station selection ---
+function selectStation(index, autoplay) {
+    if (!filteredStations[index]) return;
+
+    const station = filteredStations[index];
+    currentIndex = index;
+    currentStation = station;
+
+    renderNowPlaying();
+    renderPresets();
+    rememberStation(station);
+
+    if (autoplay) {
+        playStation(station);
+    } else {
+        renderPlayButton();
+    }
+}
+
+function selectStationObject(station, autoplay) {
+    if (!station) return;
+    currentStation = station;
+    currentIndex = filteredStations.findIndex(s => s.url === station.url);
+
+    renderNowPlaying();
+    renderPresets();
+    rememberStation(station);
+
+    if (autoplay) {
+        playStation(station);
+    } else {
+        renderPlayButton();
+    }
+}
+
+function moveStation(direction) {
+    triggerHaptic();
+    if (!filteredStations.length) return;
+    const next = currentIndex < 0
+        ? (direction > 0 ? 0 : filteredStations.length - 1)
+        : (currentIndex + direction + filteredStations.length) % filteredStations.length;
+    selectStation(next, true);
+}
+
+function togglePlay() {
+    triggerHaptic();
+    if (isLoading) return;
+
+    if (currentUrl && !audio.paused) {
+        stopAudio();
+        return;
+    }
+
+    if (currentStation) {
+        playStation(currentStation);
+        return;
+    }
+
+    selectStation(0, true);
+}
+
+// --- Audio (HLS with native fallback) ---
+function destroyHls() {
+    if (currentHls) {
+        currentHls.destroy();
+        currentHls = null;
+    }
+
+    if (audio.hls) {
+        audio.hls.destroy();
+        audio.hls = null;
+    }
+}
+
+const noiseAudio = new Audio();
+noiseAudio.loop = true;
+noiseAudio.preload = 'auto';
+noiseAudio.volume = 0.2;
+
+(function initNoise() {
+    const key = 'wave:noise';
+
+    const useDataUrl = dataUrl => {
+        if (!noiseAudio.src) noiseAudio.src = dataUrl;
+    };
+
+    try {
+        const cached = localStorage.getItem(key);
+        if (cached) {
+            useDataUrl(cached);
+            return;
+        }
+    } catch (error) {}
+
+    fetch('noise.mp3').then(response => {
+        if (!response.ok) throw new Error('noise fetch failed');
+        return response.blob();
+    }).then(blob => {
+        const reader = new FileReader();
+        reader.onload = () => {
+            const dataUrl = reader.result;
+            try {
+                localStorage.setItem(key, dataUrl);
+            } catch (error) {}
+            useDataUrl(dataUrl);
+        };
+        reader.readAsDataURL(blob);
+    }).catch(() => {
+        useDataUrl('noise.mp3');
+    });
+})();
+
+function startNoise() {
+    try {
+        noiseAudio.currentTime = 0;
+        const play = noiseAudio.play();
+        if (play && play.catch) play.catch(() => {});
+    } catch (error) {}
+}
+
+function pauseNoise() {
+    try {
+        noiseAudio.pause();
+    } catch (error) {}
+}
+
+function stopAudio() {
+    isLoading = false;
+    destroyHls();
+    audio.pause();
+    audio.removeAttribute('src');
+    audio.load();
+    currentUrl = null;
+    pauseNoise();
+    releaseWakeLock();
+    setStatus('stopped');
+    renderPlayButton();
+}
+
+function playStation(station) {
+    if (!station) return;
+
+    stopAudio();
+    isLoading = true;
+    currentUrl = station.url;
+    setStatus('loading');
+    renderPlayButton();
+    updateMediaSession(station);
+    startNoise();
+
+    const onPlaySuccess = () => {
+        isLoading = false;
+        pauseNoise();
+        setStatus('playing');
+        renderPlayButton();
+        requestWakeLock();
+    };
+
+    const onPlayError = () => {
+        isLoading = false;
+        stopAudio();
+    };
+
+    if (station.url.includes('.m3u8') && window.Hls && Hls.isSupported()) {
+        currentHls = new Hls();
+        audio.hls = currentHls;
+        currentHls.loadSource(station.url);
+        currentHls.attachMedia(audio);
+        currentHls.on(Hls.Events.MANIFEST_PARSED, () => {
+            audio.play().then(onPlaySuccess).catch(onPlayError);
+        });
+        currentHls.on(Hls.Events.ERROR, (event, data) => {
+            if (data && data.fatal) onPlayError();
+        });
+        return;
+    }
+
+    if (station.url.includes('.m3u8') && audio.canPlayType('application/vnd.apple.mpegurl')) {
+        audio.src = station.url;
+        audio.play().then(onPlaySuccess).catch(onPlayError);
+        return;
+    }
+
+    audio.src = station.url;
+    audio.play().then(onPlaySuccess).catch(onPlayError);
+}
+
+// --- Media Session (lockscreen / steering-wheel keys) ---
+function resolveArtworkSrc(src) {
+    try {
+        return new URL(src, document.baseURI).href;
+    } catch (error) {
+        return src;
+    }
+}
+
+function getStationArtwork(station) {
+    const sizes = ['96x96', '128x128', '192x192', '512x512'];
+    const artwork = [];
+    const cover = station.cover || station.logo;
+
+    if (cover) {
+        const stationSrc = resolveArtworkSrc(cover);
+        sizes.forEach(size => {
+            artwork.push({ src: stationSrc, sizes: size, type: 'image/jpeg' });
+        });
+    }
+
+    const defaultSrc = resolveArtworkSrc(DEFAULT_COVER_ART);
+    sizes.forEach(size => {
+        artwork.push({ src: defaultSrc, sizes: size, type: 'image/jpeg' });
+    });
+
+    return artwork;
+}
+
+function updateMediaSession(station) {
+    if ('mediaSession' in navigator) {
+        navigator.mediaSession.metadata = new MediaMetadata({
+            title: station.name,
+            artist: station.category,
+            album: station.country,
+            artwork: getStationArtwork(station)
+        });
+
+        navigator.mediaSession.setActionHandler('nexttrack', () => moveStation(1));
+        navigator.mediaSession.setActionHandler('previoustrack', () => moveStation(-1));
+        navigator.mediaSession.setActionHandler('play', () => {
+            if (currentStation) playStation(currentStation);
+        });
+        navigator.mediaSession.setActionHandler('pause', stopAudio);
+    }
+}
+
+// --- Presets (FM 1, FM 2, FM 3 -> 18 slots): tap = play, hold = save current ---
+function loadPresets() {
+    try {
+        const saved = JSON.parse(localStorage.getItem(presetsKey) || 'null');
+        if (Array.isArray(saved)) {
+            return Array.from({ length: TOTAL_PRESETS }, (_, i) =>
+                typeof saved[i] === 'string' ? saved[i] : ''
+            );
+        }
+    } catch (error) {}
+    return Array(TOTAL_PRESETS).fill('');
+}
+
+function savePresets() {
+    try {
+        localStorage.setItem(presetsKey, JSON.stringify(presets));
+    } catch (error) {}
+}
+
+function findStationByName(name) {
+    return stations.find(station => station.name === name);
+}
+
+function renderPresets() {
+    presetsEl.innerHTML = '';
+    const bankOffset = currentBank * PRESETS_PER_BANK;
+
+    for (let i = 0; i < PRESETS_PER_BANK; i++) {
+        const slotIndex = bankOffset + i;
+        const name = presets[slotIndex];
+        const stationObj = name ? findStationByName(name) : null;
+
+        const button = document.createElement('button');
+        button.type = 'button';
+
+        const num = document.createElement('span');
+        num.className = 'pnum';
+        num.textContent = String(i + 1);
+
+        const label = document.createElement('span');
+        if (stationObj) {
+            label.className = 'pname';
+            label.textContent = stationObj.name;
+            button.setAttribute('aria-label', 'FM ' + (currentBank + 1) + ' Preset ' + (i + 1) + ': ' + stationObj.name);
+        } else {
+            label.className = 'pname empty';
+            label.textContent = '+ Add';
+            button.setAttribute('aria-label', 'FM ' + (currentBank + 1) + ' Preset ' + (i + 1) + ': empty. Hold to save current station.');
+        }
+
+        if (currentStation && stationObj && stationObj.url === currentStation.url) {
+            button.classList.add('active');
+        }
+
+        button.appendChild(num);
+        button.appendChild(label);
+        attachPresetPress(button, slotIndex);
+        presetsEl.appendChild(button);
+    }
+}
+
+function attachPresetPress(button, slot) {
+    let holdTimer = null;
+    let held = false;
+
+    const cancel = () => {
+        if (holdTimer) {
+            clearTimeout(holdTimer);
+            holdTimer = null;
+        }
+    };
+
+    button.addEventListener('pointerdown', () => {
+        held = false;
+        cancel();
+        holdTimer = setTimeout(() => {
+            held = true;
+            holdTimer = null;
+            savePresetSlot(slot, button);
+        }, 650);
+    });
+
+    button.addEventListener('pointerup', () => {
+        const wasHold = held;
+        cancel();
+        held = false;
+        if (!wasHold) playPresetSlot(slot);
+    });
+
+    button.addEventListener('pointerleave', cancel);
+    button.addEventListener('pointercancel', cancel);
+    button.addEventListener('pointermove', cancel);
+
+    button.addEventListener('keydown', event => {
+        if (event.key === 'Enter' || event.key === ' ') {
+            event.preventDefault();
+            playPresetSlot(slot);
+        }
+    });
+
+    button.addEventListener('click', event => {
+        event.preventDefault();
+    });
+}
+
+function playPresetSlot(slot) {
+    triggerHaptic();
+    const stationObj = presets[slot] ? findStationByName(presets[slot]) : null;
+    if (stationObj) selectStationObject(stationObj, true);
+}
+
+function savePresetSlot(slot, button) {
+    if (!currentStation) return;
+    presets[slot] = currentStation.name;
+    savePresets();
+    renderPresets();
+    try {
+        if (navigator.vibrate) navigator.vibrate(50);
+    } catch (error) {}
+    if (button && button.isConnected) {
+        button.classList.add('saved-flash');
+        setTimeout(() => button.classList.remove('saved-flash'), 600);
+    }
+}
+
+bankButtons.forEach(btn => {
+    btn.addEventListener('click', () => {
+        triggerHaptic();
+        currentBank = Number(btn.dataset.bank);
+        bankButtons.forEach(b => b.classList.toggle('active', b === btn));
+        renderPresets();
+    });
+});
+
+// --- Wake lock (keep screen on in the car mount while playing) ---
+async function requestWakeLock() {
+    try {
+        if ('wakeLock' in navigator) {
+            wakeLock = await navigator.wakeLock.request('screen');
+        }
+    } catch (error) {
+        wakeLock = null;
+    }
+}
+
+function releaseWakeLock() {
+    try {
+        if (wakeLock) wakeLock.release();
+    } catch (error) {}
+    wakeLock = null;
+}
+
+document.addEventListener('visibilitychange', () => {
+    if (document.visibilityState === 'visible' && currentUrl && !audio.paused) {
+        requestWakeLock();
+    }
+});
+
+// --- Persistence (shares last station with index.html) ---
+function rememberStation(station) {
+    try {
+        localStorage.setItem(storageKey, JSON.stringify({
+            country: station.country,
+            category: station.category,
+            name: station.name
+        }));
+    } catch (error) {}
+}
+
+function restoreLastStation() {
+    try {
+        const saved = JSON.parse(localStorage.getItem(storageKey) || 'null');
+        if (!saved || !saved.name) return false;
+        const index = filteredStations.findIndex(station => station.name === saved.name);
+        if (index >= 0) {
+            selectStation(index, false);
+            return true;
+        }
+    } catch (error) {}
+    return false;
+}
+
+// --- Events ---
+playButton.addEventListener('click', togglePlay);
+prevButton.addEventListener('click', () => moveStation(-1));
+nextButton.addEventListener('click', () => moveStation(1));
+
+document.addEventListener('keydown', event => {
+    if (event.target && ['INPUT', 'TEXTAREA', 'SELECT'].includes(event.target.tagName)) return;
+
+    if (event.key === 'ArrowRight') {
+        event.preventDefault();
+        moveStation(1);
+    }
+
+    if (event.key === 'ArrowLeft') {
+        event.preventDefault();
+        moveStation(-1);
+    }
+
+    if (event.key === ' ' && (currentStation || filteredStations.length)) {
+        event.preventDefault();
+        togglePlay();
+    }
+});
+
+audio.addEventListener('ended', () => {
+    currentUrl = null;
+    releaseWakeLock();
+    setStatus('stopped');
+    renderPlayButton();
+});
+
+audio.addEventListener('error', () => {
+    if (currentUrl) {
+        stopAudio();
+        setStatus('error');
+        stationMetaEl.textContent = "Stream offline or unavailable";
+    }
+});
+
+// --- Init ---
+initCountryFilter();
+renderPresets();
+if (!restoreLastStation()) {
+    renderNowPlaying();
+    renderPlayButton();
+    setStatus('stopped');
+}
+
+if ('serviceWorker' in navigator) {
+    window.addEventListener('load', () => {
+        navigator.serviceWorker.register('sw.js').catch(() => {});
+    });
+}
+</script>
+</body>
+</html>

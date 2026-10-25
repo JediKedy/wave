@@ -6,7 +6,7 @@ const stations = [
 		url: 'https://dygedge2.radyotvonline.net/kralfm/playlist.m3u8',
 		category: 'Turkish arabesque',
 		quality: '128kbps',
-		cover: './coverarts/kral-fm.jpg'
+		cover: './coverarts/kral-fm.png'
 	},
 	{
 		name: 'Kral Pop',
@@ -15,7 +15,7 @@ const stations = [
 		url: 'https://dygedge.radyotvonline.net/kralpop/playlist.m3u8',
 		category: 'Turkish pop',
 		quality: '128kbps',
-		cover: './coverarts/kral-pop.jpg'
+		cover: './coverarts/kral-pop-fm.png'
 	},
 	{
 		name: 'Power Türk FM',
@@ -42,7 +42,7 @@ const stations = [
 		url: 'https://ais-sa2.cdnstream1.com/1976_128.mp3',
 		category: 'Country',
 		quality: '128kbps',
-		cover: './coverarts/americas-country.jpg'
+		cover: './coverarts/americas-country.png'
 	},
 	{
 		name: 'WLTW 106.7 Lite FM',
@@ -51,7 +51,7 @@ const stations = [
 		url: 'https://stream.revma.ihrhls.com/zc1477/hls.m3u8',
 		category: 'Soft adult contemporary',
 		quality: '256kbps',
-		cover: './coverarts/wltw-106-7-lite-fm.jpg'
+		cover: './coverarts/wltw-106-7-lite-fm.png'
 	},
 	{
 		name: 'BBC World Service',
@@ -60,7 +60,7 @@ const stations = [
 		url: 'https://stream.live.vc.bbcmedia.co.uk/bbc_world_service',
 		category: 'News',
 		quality: '128kbps',
-		cover: './coverarts/bbc-world-service.jpg'
+		cover: './coverarts/bbc-world-service.png'
 	},
 	{
 		name: 'BBC Radio 1',
@@ -69,7 +69,7 @@ const stations = [
 		url: 'https://a.files.bbci.co.uk/ms6/live/3441A116-B12E-4D2F-ACA8-C1984642FA4B/audio/simulcast/hls/nonuk/audio_syndication_low_sbr_v1/cfs/bbc_radio_one.m3u8',
 		category: 'Contemporary hits',
 		quality: '128kbps',
-		cover: './coverarts/bbc-radio-1.jpg'
+		cover: './coverarts/bbc-radio-1.png'
 	},
 	{
 		name: 'BBC Radio 2',
@@ -78,7 +78,7 @@ const stations = [
 		url: 'https://a.files.bbci.co.uk/ms6/live/3441A116-B12E-4D2F-ACA8-C1984642FA4B/audio/simulcast/hls/nonuk/audio_syndication_low_sbr_v1/aks/bbc_radio_two.m3u8',
 		category: 'Adult contemporary',
 		quality: '128kbps',
-		cover: './coverarts/bbc-radio-2.jpg'
+		cover: './coverarts/bbc-radio-2.png'
 	},
 	{
 		name: 'Heart FM',
@@ -87,7 +87,7 @@ const stations = [
 		url: 'https://media-ice.musicradio.com/HeartLondonMP3',
 		category: 'Adult contemporary',
 		quality: '128kbps',
-		cover: './coverarts/heart-fm.jpg'
+		cover: './coverarts/heart-fm.png'
 	},
 	{
 		name: 'WSM 650 AM',
@@ -96,7 +96,7 @@ const stations = [
 		url: 'https://ais-sa8.cdnstream1.com/3666_64.mp3',
 		category: 'Classic country',
 		quality: '128kbps',
-		cover: './coverarts/wsm-650-am.jpg'
+		cover: './coverarts/wsm-650-am.png'
 	},
 	{
 		name: 'WNYC 93.9 FM',
@@ -105,7 +105,7 @@ const stations = [
 		url: 'https://fm939.wnyc.org/wnycfm-web',
 		category: 'Public radio',
 		quality: '256kbps',
-		cover: './coverarts/wnyc-93-9-fm.jpg'
+		cover: './coverarts/wnyc-93-9-fm.png'
 	},
 	{
 		name: 'France Inter',
@@ -114,8 +114,17 @@ const stations = [
 		url: 'https://icecast.radiofrance.fr/franceinter-midfi.mp3',
 		category: 'Public generalist',
 		quality: '128kbps',
-		cover: './coverarts/france-inter.jpg'
+		cover: './coverarts/france-inter.png'
 	},
+	{
+        name: '1LIVE',
+        description: 'A popular young adult radio station from Germany\'s WDR, featuring a vibrant mix of current pop, hip-hop, and dance hits along with comedy and lifestyle content.',
+        country: 'Germany',
+        url: 'https://wdr-1live-live.icecastssl.wdr.de/wdr/1live/live/mp3/128/stream.mp3',
+        category: 'Contemporary hits',
+        quality: '128kbps',
+        cover: './coverarts/1-live.png'
+    },
 	{
 		name: 'Deutschlandfunk',
 		description: 'Germany\'s premier public news station, delivering comprehensive coverage of national and international events, culture, and current affairs.',
@@ -123,7 +132,7 @@ const stations = [
 		url: 'https://st01.sslstream.dlf.de/dlf/01/128/mp3/stream.mp3?aggregator=radio-de',
 		category: 'News',
 		quality: '128kbps',
-		cover: './coverarts/deutschlandfunk.jpg'
+		cover: './coverarts/deutschlandfunk.png'
 	},
 	{
 		name: 'Xəzər FM (103 FM)',

@@ -24,7 +24,7 @@ const stations = [
 		url: 'https://live.powerapp.com.tr/powerturk/abr/playlist.m3u8',
 		category: 'Turkish pop',
 		quality: '256kbps',
-		cover: './coverarts/power-turk-fm.jpg'
+		cover: './coverarts/power-turk-fm.png'
 	},
 	{
 		name: 'Power FM',
@@ -33,7 +33,7 @@ const stations = [
 		url: 'https://live.powerapp.com.tr/powerfmadver/abr/playlist.m3u8',
 		category: 'International pop',
 		quality: '128kbps',
-		cover: './coverarts/power-fm.jpg'
+		cover: './coverarts/power-fm.png'
 	},
 	{
 		name: 'America\'s Country',
@@ -132,7 +132,7 @@ const stations = [
 		url: 'https://s40.myradiostream.com/22546/listen.mp3',
 		category: 'Pop / Dance',
 		quality: '128kbps',
-		cover: './coverarts/xezer-fm.jpg'
+		cover: './coverarts/xezer-fm.png'
 	},
 	{
 		name: 'Baku Retro FM (93.3 FM)',
@@ -141,7 +141,7 @@ const stations = [
 		url: 'https://stream.bakuradioalliance.az/retrofm',
 		category: 'Retro',
 		quality: '128kbps',
-		cover: './coverarts/baku-retro-fm.jpg'
+		cover: './coverarts/baku-retro-fm.png'
 	},
 	{
 		name: 'Baku Hit FM (97.7 FM)',
@@ -150,7 +150,7 @@ const stations = [
 		url: 'https://stream.bakuradioalliance.az/hitfm',
 		category: 'Contemporary hits',
 		quality: '128kbps',
-		cover: './coverarts/baku-hit-fm.jpg'
+		cover: './coverarts/baku-hit-fm.png'
 	},
 	{
 		name: 'Radio Enerji (101.1 FM)',
@@ -159,7 +159,7 @@ const stations = [
 		url: 'https://icecast.livetv.az/antennfm',
 		category: 'Pop / Dance',
 		quality: '128kbps',
-		cover: './coverarts/radio-enerji.jpg'
+		cover: './coverarts/enerji-fm.png'
 	},
 	{
 		name: 'Avto FM (107.7 FM)',
@@ -168,7 +168,7 @@ const stations = [
 		url: 'http://5.191.241.101:8000/avtofm',
 		category: 'Pop / Generalist',
 		quality: '128kbps',
-		cover: './coverarts/avto-fm.jpg'
+		cover: './coverarts/avto-fm.png'
 	},
 	{
 		name: 'Media FM (105.5 FM)',
@@ -177,7 +177,7 @@ const stations = [
 		url: 'https://icecast.livetv.az/mediafm',
 		category: 'Generalist',
 		quality: '128kbps',
-		cover: './coverarts/media-fm.jpg'
+		cover: './coverarts/media-fm.png'
 	},
 	{
 		name: 'TMB Radio (100.5 FM)',
@@ -186,7 +186,7 @@ const stations = [
 		url: 'https://s39.myradiostream.com/:5458/listen.mp3',
 		category: 'Pop / Folk',
 		quality: '128kbps',
-		cover: './coverarts/tmb-radio.jpg'
+		cover: './coverarts/radio-tmb.png'
 	},
 	{
 		name: 'ASAN Radio (100 FM)',
@@ -195,7 +195,7 @@ const stations = [
 		url: 'http://94.20.74.206:4448/stream1',
 		category: 'Public radio',
 		quality: '128kbps',
-		cover: './coverarts/asan-radio.jpg'
+		cover: './coverarts/asan-radio.png'
 	},
 	{
 		name: 'İctimai Radio (90 FM)',
@@ -204,7 +204,7 @@ const stations = [
 		url: 'https://stream.itv.az/rtmp:/radio/playlist.m3u8',
 		category: 'Public radio',
 		quality: '128kbps',
-		cover: './coverarts/ictimai-radio.jpg'
+		cover: './coverarts/90-fm.png'
 	},
 	{
 		name: 'Araz FM (103.3 FM)',
@@ -213,6 +213,6 @@ const stations = [
 		url: 'https://s14.myradiostream.com/30454/listen.mp3',
 		category: 'Pop / National',
 		quality: '128kbps',
-		cover: './coverarts/araz-fm.jpg'
+		cover: './coverarts/araz-fm.png'
 	}
 ];
